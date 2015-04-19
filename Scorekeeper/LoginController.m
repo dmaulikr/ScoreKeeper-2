@@ -41,6 +41,11 @@
     [self.view addSubview:self.loginButton];
 }
 
+-(void) viewDidAppear:(BOOL)animated
+{
+       [self.navigationController pushViewController:[[ViewController alloc] init] animated:NO];
+}
+
 #pragma mark - FBLoginView Delegate method implementation
 
 -(void)loginViewShowingLoggedInUser:(FBLoginView *)loginView

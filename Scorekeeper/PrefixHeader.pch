@@ -1,0 +1,17 @@
+//
+//  PrefixHeader.pch
+//  Scorekeeper
+//
+//  Created by Nandhakumar V on 19/04/15.
+//  Copyright (c) 2015 suresh ramasamy. All rights reserved.
+//
+
+#import "SKConstants.h"
+
+#ifndef Scorekeeper_PrefixHeader_pch
+#define Scorekeeper_PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif

@@ -11,6 +11,6 @@
 @interface DefaultRow : UITableViewCell
 
 -(id) initWithStyle:(UITableViewCellStyle) style reuseIdentifier:(NSString *)identifier;
--(id) initCellWithData:(NSMutableArray *)dataArr forRowNum:(int) row ofTotalRows:(int)total andNoOfCols:(int)noOfCols;
+-(id) initCellWithData:(id)obj forRowNum:(int) row ofTotalRows:(int)total andNoOfCols:(int)noOfCols;
 
 @end

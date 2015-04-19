@@ -2,7 +2,7 @@
 //  Penalty.m
 //  Scorekeeper
 //
-//  Created by MAC on 17/04/15.
+//  Created by Nandhakumar V on 19/04/15.
 //  Copyright (c) 2015 suresh ramasamy. All rights reserved.
 //
 
@@ -11,10 +11,11 @@
 
 @implementation Penalty
 
+@dynamic game_type;
+@dynamic jersey;
 @dynamic penalty_id;
 @dynamic per;
-@dynamic jersey;
 @dynamic time_off;
-@dynamic game_type;
+@dynamic desc;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "PenaltyCell.h"
+#import "Penalty.h"
 
 @interface PenaltyCell ()
 {
@@ -20,9 +21,9 @@
 
 @implementation PenaltyCell
 
--(id) initCellWithData:(NSMutableArray *)dataArr forRowNum:(int) row ofTotalRows:(int)total andNoOfCols:(int)noOfCols
+-(id) initCellWithData:(id)obj forRowNum:(int) row ofTotalRows:(int)total andNoOfCols:(int)noOfCols
 {
-    self=[super initCellWithData:dataArr forRowNum:row ofTotalRows:total andNoOfCols:noOfCols];
+    self=[super initCellWithData:obj forRowNum:row ofTotalRows:total andNoOfCols:noOfCols];
     
     if (self)
     {
@@ -34,7 +35,7 @@
             [self createViews];
         }
         
-        if (dataArr==NULL)
+        if (obj==nil)
         {
             indexLbl.text=@"#";
             playerName.text=@"PER";
@@ -44,11 +45,15 @@
         }
         else
         {
-            indexLbl.text=[dataArr objectAtIndex:0];
-            playerName.text=[dataArr objectAtIndex:1];
-            jerseyLbl.text=[dataArr objectAtIndex:2];
-            timeOffLbl.text=[dataArr objectAtIndex:3];
-            descriptionLbl.text=[dataArr objectAtIndex:4];
+            if([obj isKindOfClass:[Penalty class]])
+            {
+                Penalty *penalty = (Penalty*)obj;
+                indexLbl.text=[NSString stringWithFormat:@"%@", penalty.penalty_id];
+                playerName.text=penalty.per;
+                jerseyLbl.text=penalty.jersey;
+                timeOffLbl.text=penalty.time_off;
+                descriptionLbl.text=penalty.desc;
+            }
         }
         
     }

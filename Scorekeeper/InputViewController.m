@@ -9,6 +9,8 @@
 #import "InputViewController.h"
 #import "SKCoreDataManager.h"
 #import "Player.h"
+#import "Penalty.h"
+#import "Goal.h"
 
 @interface InputViewController ()
 {
@@ -34,7 +36,7 @@
     UILabel *labelFive;
     UITextField *fieldFive;
     
-    NSMutableDictionary *updateDict;
+    NSMutableArray *updateArray;
 }
 @property (nonatomic, strong)SKCoreDataManager *coreDataManager;
 @end
@@ -43,7 +45,7 @@
 
 @synthesize editMode,delegate;
 
--(id)initWithFrame:(CGRect)frame withType:(int)type source:(NSMutableDictionary *)sourceData
+-(id)initWithFrame:(CGRect)frame withType:(int)type source:(NSMutableArray *)sourceData
 {
     self=[super init];
     
@@ -52,11 +54,11 @@
         parentRect=frame;
         displayType=type;
         
-        typeOne=[[NSMutableArray alloc] initWithObjects:@"Player Name", nil];
+        typeOne=[[NSMutableArray alloc] initWithObjects:@"Position", @"Player Name", nil];
         typeTwo=[[NSMutableArray alloc] initWithObjects:@"PER",@"JERSEY",@"TIME OFF",@"DESCRIPTION", nil];
         typeThree=[[NSMutableArray alloc] initWithObjects:@"PER",@"TIME",@"GOAL",@"ASSIST",@"ASSIST", nil];
         
-        updateDict=sourceData;
+        updateArray=sourceData;
         self.coreDataManager = [SKCoreDataManager sharedInstance];
     }
 
@@ -102,7 +104,7 @@
     {
         case 1:
         {
-            [self showOrHide:NO count:1 lblArr:typeOne];
+            [self showOrHide:NO count:2 lblArr:typeOne];
             break;
         }
         case 2:
@@ -123,16 +125,93 @@
 
 -(void)updateInitialData
 {
-    NSMutableArray *internalArr=[updateDict objectForKey:[NSString stringWithFormat:@"%i",editMode]];
-
-    for (int i=0; i<5; i++)
+    if(editMode == -1)
+        return;
+    switch (displayType)
     {
-        UITextField *field=((UITextField *)[self.view viewWithTag:(300+i)]);
-        
-        if (!field.isHidden)
+        case 1:
         {
-            field.text=[internalArr objectAtIndex:i+1];
+            Player *player = [updateArray objectAtIndex:editMode];
+            for (int i = 0; i<typeOne.count; i++) {
+                UITextField *textFiled=((UITextField *)[self.view viewWithTag:300+i]);
+                if (!textFiled.isHidden)
+                {
+                    switch (i) {
+                        case 0:
+                            textFiled.text=player.player_position;
+                            break;
+                        case 1:
+                            textFiled.text=player.player_name;
+                            break;
+                        default:
+                            textFiled.text= @"";
+                            break;
+                    }
+                }
+            }
+            break;
         }
+        case 2:
+        {
+            Penalty *penalty = [updateArray objectAtIndex:editMode];
+            for (int i = 0; i<typeTwo.count; i++) {
+                UITextField *textFiled=((UITextField *)[self.view viewWithTag:300+i]);
+                if (!textFiled.isHidden)
+                {
+                    switch (i) {
+                        case 0:
+                            textFiled.text=penalty.per;
+                            break;
+                        case 1:
+                            textFiled.text=penalty.jersey;
+                            break;
+                        case 2:
+                            textFiled.text=penalty.time_off;
+                            break;
+                        case 3:
+                            textFiled.text=penalty.desc;
+                            break;
+                        default:
+                            textFiled.text= @"";
+                            break;
+                    }
+                }
+            }
+            break;
+        }
+        case 3:
+        {
+            Goal *goal = [updateArray objectAtIndex:editMode];
+            for (int i = 0; i<typeThree.count; i++) {
+                UITextField *textFiled=((UITextField *)[self.view viewWithTag:300+i]);
+                if (!textFiled.isHidden)
+                {
+                    switch (i) {
+                        case 0:
+                            textFiled.text=goal.per;
+                            break;
+                        case 1:
+                            textFiled.text=goal.time;
+                            break;
+                        case 2:
+                            textFiled.text=goal.goal;
+                            break;
+                        case 3:
+                            textFiled.text=goal.assist1;
+                            break;
+                        case 4:
+                            textFiled.text=goal.assist2;
+                            break;
+                        default:
+                            textFiled.text= @"";
+                            break;
+                    }
+                }
+            }
+            break;
+        }
+        default:
+            break;
     }
 }
 
@@ -183,94 +262,214 @@
 
 -(void)doneEventFired:(id)sender
 {
-    if (editMode==-1)
+
+    switch (displayType)
     {
-        NSError *error;
-        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Player" inManagedObjectContext:self.coreDataManager.managedObjectContext];
-        Player *player = [[Player alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:self.coreDataManager.managedObjectContext];
-        long playerId = [[updateDict allKeys] count] + 1;
-
-         player.player_id = [NSNumber numberWithLong:playerId];
-        
-        for (int i=0; i<5; i++)
+        case 1:
         {
-            UITextField *field=((UITextField *)[self.view viewWithTag:300+i]);
-
-            if (!field.isHidden)
+            NSError *error;
+            if (editMode==-1)
             {
-                player.player_name = field.text;
+                NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Player" inManagedObjectContext:self.coreDataManager.managedObjectContext];
+                Player *player = [[Player alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:self.coreDataManager.managedObjectContext];
+                long playerId = [updateArray count] + 1;
+                
+                player.player_id = [NSNumber numberWithLong:playerId];
+                player.game_type = [NSNumber numberWithInt:self.gameType];
+                
+                for (int i = 0; i<typeOne.count; i++) {
+                    UITextField *textFiled=((UITextField *)[self.view viewWithTag:300+i]);
+                    if (!textFiled.isHidden)
+                    {
+                        switch (i) {
+                            case 0:
+                                player.player_position = textFiled.text;
+                                break;
+                            case 1:
+                                player.player_name = textFiled.text;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                if ([self.coreDataManager.managedObjectContext save:&error]) {
+                    [updateArray addObject:player];
+                }
+                
             }
+            else
+            {
+                Player *player = [updateArray objectAtIndex:editMode];
+                for (int i = 0; i<typeOne.count; i++) {
+                    UITextField *textFiled=((UITextField *)[self.view viewWithTag:300+i]);
+                    if (!textFiled.isHidden)
+                    {
+                        switch (i) {
+                            case 0:
+                                player.player_position = textFiled.text;
+                                break;
+                            case 1:
+                                player.player_name = textFiled.text;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                if ([self.coreDataManager.managedObjectContext save:&error]) {
+                }
+            }
+            break;
         }
-        if ([self.coreDataManager.managedObjectContext save:&error]) {
-            [updateDict setObject:player forKey:[NSString stringWithFormat:@"%lu",(unsigned long)([[updateDict allKeys] count])]];
-        }
-
-    }
-    else
-    {
-        NSMutableArray *internalArr=[updateDict objectForKey:[NSString stringWithFormat:@"%i",editMode]];
-        
-        for (int i=0; i<5; i++)
+        case 2:
         {
-            UITextField *field=((UITextField *)[self.view viewWithTag:300+i]);
+            NSError *error;
+            if (editMode==-1)
+            {
+                NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Penalty" inManagedObjectContext:self.coreDataManager.managedObjectContext];
+                Penalty *penalty = [[Penalty alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:self.coreDataManager.managedObjectContext];
+                long penaltyId = [updateArray count] + 1;
+                
+                penalty.penalty_id = [NSNumber numberWithLong:penaltyId];
+                penalty.game_type = [NSNumber numberWithInt:self.gameType];
+                
+                for (int i = 0; i<typeTwo.count; i++) {
+                    UITextField *textFiled=((UITextField *)[self.view viewWithTag:300+i]);
+                    if (!textFiled.isHidden)
+                    {
+                        switch (i) {
+                            case 0:
+                                penalty.per = textFiled.text;
+                                break;
+                            case 1:
+                                penalty.jersey = textFiled.text;
+                                break;
+                            case 2:
+                                penalty.time_off = textFiled.text;
+                                break;
+                            case 3:
+                                penalty.desc = textFiled.text;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                if ([self.coreDataManager.managedObjectContext save:&error]) {
+                    [updateArray addObject:penalty];
+                }
+                
+            }
+            else
+            {
+                Penalty *penalty = [updateArray objectAtIndex:editMode];
+                for (int i = 0; i<typeTwo.count; i++) {
+                    UITextField *textFiled=((UITextField *)[self.view viewWithTag:300+i]);
+                    if (!textFiled.isHidden)
+                    {
+                        switch (i) {
+                            case 0:
+                                penalty.per = textFiled.text;
+                                break;
+                            case 1:
+                                penalty.jersey = textFiled.text;
+                                break;
+                            case 2:
+                                penalty.time_off = textFiled.text;
+                                break;
+                            case 3:
+                                penalty.desc = textFiled.text;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                if ([self.coreDataManager.managedObjectContext save:&error]) {
+                }
+            }
+            break;
+        }
+        case 3:
+        {
+            NSError *error;
+            if (editMode==-1)
+            {
+                NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Goal" inManagedObjectContext:self.coreDataManager.managedObjectContext];
+                Goal *goal = [[Goal alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:self.coreDataManager.managedObjectContext];
+                long penaltyId = [updateArray count] + 1;
+                
+                goal.goal_id = [NSNumber numberWithLong:penaltyId];
+                goal.game_type = [NSNumber numberWithInt:self.gameType];
             
-            if (!field.isHidden)
-            {
-                [internalArr replaceObjectAtIndex:(i+1) withObject:field.text];
+                for (int i = 0; i<typeThree.count; i++) {
+                    UITextField *textFiled=((UITextField *)[self.view viewWithTag:300+i]);
+                    if (!textFiled.isHidden)
+                    {
+                        switch (i) {
+                            case 0:
+                                goal.per = textFiled.text;
+                                break;
+                            case 1:
+                                goal.time = textFiled.text;
+                                break;
+                            case 2:
+                                goal.goal = textFiled.text;
+                                break;
+                            case 3:
+                                goal.assist1 = textFiled.text;
+                                break;
+                            case 4:
+                                goal.assist2 = textFiled.text;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                if ([self.coreDataManager.managedObjectContext save:&error]) {
+                    [updateArray addObject:goal];
+                }
+                
             }
-        }
-    }
+            else
+            {
+                Goal *goal = [updateArray objectAtIndex:editMode];
+                for (int i = 0; i<typeThree.count; i++) {
+                    UITextField *textFiled=((UITextField *)[self.view viewWithTag:300+i]);
+                    if (!textFiled.isHidden)
+                    {
+                        switch (i) {
+                            case 0:
+                                goal.per = textFiled.text;
+                                break;
+                            case 1:
+                                goal.time = textFiled.text;
+                                break;
+                            case 2:
+                                goal.goal = textFiled.text;
+                                break;
+                            case 3:
+                                goal.assist1 = textFiled.text;
+                                break;
+                            case 4:
+                                goal.assist2 = textFiled.text;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
 
-//    switch (displayType)
-//    {
-//        case 1:
-//        {
-//            if (editMode==-1)
-//            {
-//                NSMutableArray *internalArr=[[NSMutableArray alloc] init];
-//
-//                [internalArr addObject:[NSString stringWithFormat:@"%lu",[[updateDict allKeys] count]+1]];
-//
-//                for (int i=0; i<5; i++)
-//                {
-//                    UITextField *field=((UITextField *)[self.view viewWithTag:300+i]);
-//
-//                    if (!field.isHidden)
-//                    {
-//                        [internalArr addObject:field.text];
-//                    }
-//                }
-//                [updateDict setObject:internalArr forKey:[NSString stringWithFormat:@"%lu",(unsigned long)([[updateDict allKeys] count])]];
-//            }
-//            else
-//            {
-//                NSMutableArray *internalArr=[updateDict objectForKey:[NSString stringWithFormat:@"%i",editMode]];
-//
-//                for (int i=0; i<5; i++)
-//                {
-//                    UITextField *field=((UITextField *)[self.view viewWithTag:300+i]);
-//                    
-//                    if (!field.isHidden)
-//                    {
-//                        [internalArr replaceObjectAtIndex:(i+1) withObject:field.text];
-//                    }
-//                }
-//            }
-//            break;
-//        }
-//        case 2:
-//        {
-//            [self showOrHide:NO count:4 lblArr:typeTwo];
-//            break;
-//        }
-//        case 3:
-//        {
-//            [self showOrHide:NO count:5 lblArr:typeThree];
-//            break;
-//        }
-//        default:
-//            break;
-//    }
+                if ([self.coreDataManager.managedObjectContext save:&error]) {
+                }
+            }
+            break;
+        }
+        default:
+            break;
+    }
 
     [delegate doneButtonClicked];
 }

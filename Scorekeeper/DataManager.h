@@ -7,32 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SKCoreDataManager.h"
 
 #define HOME_DICT 1
 #define PENALTY_DICT 2
 #define GOAL_DICT 3
 
 
+
 @interface DataManager : NSObject
 {
-    NSMutableDictionary *homeDataDict;
-    NSMutableDictionary *penaltyHomeDict;
-    NSMutableDictionary *goalHomeDict;
-    
-    NSMutableDictionary *awayDataDict;
-    NSMutableDictionary *penaltyAwayDict;
-    NSMutableDictionary *goalAwayDict;
 }
 
-@property (retain) NSMutableDictionary *homeDataDict;
-@property (retain) NSMutableDictionary *penaltyHomeDict;
-@property (retain) NSMutableDictionary *goalHomeDict;
-
-@property (retain) NSMutableDictionary *awayDataDict;
-@property (retain) NSMutableDictionary *penaltyAwayDict;
-@property (retain) NSMutableDictionary *goalAwayDict;
+@property(nonatomic, strong)SKCoreDataManager *skCoreDataManager;
 
 +(DataManager *)getInstance;
--(NSMutableDictionary *)getDataDict:(NSString *)type forMode:(int)mode;
+-(NSArray *)getData:(NSString *)type forMode:(int)mode;
 
 @end

@@ -21,7 +21,8 @@
 
 @property (weak) id<InputViewControllerDelegate> delegate;
 @property int editMode;
+@property int gameType;
 
--(id)initWithFrame:(CGRect)frame withType:(int)type source:(NSMutableDictionary *)sourceData;
+-(id)initWithFrame:(CGRect)frame withType:(int)type source:(NSMutableArray *)sourceData;
 
 @end

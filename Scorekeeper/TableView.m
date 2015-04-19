@@ -29,7 +29,7 @@
 @implementation TableView
 
 @synthesize delegate;
-@synthesize popoverController,dataDict,tableSide;
+@synthesize popoverController,tableSide;
 
 -(id)initWithFrame:(CGRect)frame btnLbl:(NSString *)btnLbl cellClass:(NSString *)cell tableID:(int)tableId
 {
@@ -51,7 +51,7 @@
 
 -(void)createComponents
 {
-    dataDict=NULL;
+    self.dataArray = nil;
     
     UIView *tableBackgroundOne=[[UIView alloc] initWithFrame:CGRectMake(-2, isShowBtn?40:0, self.frame.size.width+4, self.frame.size.height-30)];
     tableBackgroundOne.backgroundColor=[UIColor grayColor];
@@ -104,7 +104,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[dataDict allKeys] count];
+    return self.dataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -118,7 +118,7 @@
         cell = [[NSClassFromString(klass) alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:klass];
     }
 
-    cell=[(DefaultRow *)cell initCellWithData:[dataDict objectForKey:[NSString stringWithFormat:@"%i",indexPath.row]] forRowNum:indexPath.row ofTotalRows:1 andNoOfCols:1];
+    cell=[(DefaultRow *)cell initCellWithData:[self.dataArray objectAtIndex:indexPath.row] forRowNum:(int)indexPath.row ofTotalRows:1 andNoOfCols:1];
     
     return cell;
     
@@ -152,12 +152,12 @@
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
         CGRect rect = [tableView rectForRowAtIndexPath:indexPath];
-        
+        rect.origin.x = self.frame.size.width;
         rect.origin.y=0;
 
         DefaultRow *row = ((DefaultRow *)[tableView cellForRowAtIndexPath:indexPath]);
         
-        [self editButtonEvent:rect withObj:row editMode:indexPath.row];
+        [self editButtonEvent:rect withObj:row editMode:(int)indexPath.row];
         
         [mainTable reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     }
@@ -170,16 +170,16 @@
 
 -(void)editButtonEvent:(CGRect)rect withObj:(id)parent editMode:(int)editMode
 {
-    InputViewController *newViewController = [[InputViewController alloc] initWithFrame:CGRectMake(0, 0, 320, 280) withType:tableID source:dataDict];
+    InputViewController *newViewController = [[InputViewController alloc] initWithFrame:CGRectMake(0, 0, 320, 280) withType:tableID source:self.dataArray];
     newViewController.delegate=self;
     newViewController.editMode=editMode;
-
+    newViewController.gameType = self.gameType;
     popoverController = [[UIPopoverController alloc] initWithContentViewController:newViewController];
     popoverController.backgroundColor=[UIColor darkGrayColor];
     popoverController.delegate=self;
     popoverController.popoverContentSize = CGSizeMake(300, 280);
     
-    [popoverController presentPopoverFromRect:rect inView:parent permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    [popoverController presentPopoverFromRect:rect inView:parent permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 }
 
 -(void)reloadData

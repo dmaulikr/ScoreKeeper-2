@@ -10,10 +10,13 @@
 
 static DataManager *instance;
 
+@interface SKCoreDataManager()
+
+@end
+
 @implementation DataManager
 
-@synthesize homeDataDict,penaltyHomeDict,goalHomeDict;
-@synthesize awayDataDict,penaltyAwayDict,goalAwayDict;
+@synthesize skCoreDataManager;
 
 +(DataManager *)getInstance
 {
@@ -27,42 +30,55 @@ static DataManager *instance;
 
 -(id)init
 {
-    [self initializeData];
-    
+    skCoreDataManager = [SKCoreDataManager sharedInstance];
     return self;
 }
 
--(void)initializeData
-{
-    homeDataDict=[[NSMutableDictionary alloc] init];
-    penaltyHomeDict=[[NSMutableDictionary alloc] init];
-    goalHomeDict=[[NSMutableDictionary alloc] init];
-    
-    awayDataDict=[[NSMutableDictionary alloc] init];
-    penaltyAwayDict=[[NSMutableDictionary alloc] init];
-    goalAwayDict=[[NSMutableDictionary alloc] init];
-}
-
--(NSMutableDictionary *)getDataDict:(NSString *)type forMode:(int)mode
+-(NSArray *)getData:(NSString *)type forMode:(int)mode
 {
     switch (mode)
     {
         case HOME_DICT:
         {
-            return [type isEqualToString:@"HOME"]?homeDataDict:awayDataDict;
+            if([type isEqualToString:@"HOME"])
+            {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"game_type == %@",[NSNumber numberWithInt:HOME_GAME]];
+                return [self.skCoreDataManager fetchRecords:@"Player" forPredicate:predicate];
+            }
+            else
+            {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"game_type == %@", [NSNumber numberWithInt:AWAY_GAME]];
+                return [self.skCoreDataManager fetchRecords:@"Player" forPredicate:predicate];
+            }
             
             break;
         }
         case PENALTY_DICT:
         {
-            return [type isEqualToString:@"HOME"]?penaltyHomeDict:penaltyAwayDict;
-            
+            if([type isEqualToString:@"HOME"])
+            {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"game_type == %@", [NSNumber numberWithInt:HOME_GAME]];
+                return [self.skCoreDataManager fetchRecords:@"Penalty" forPredicate:predicate];
+            }
+            else
+            {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"game_type == %@", [NSNumber numberWithInt:AWAY_GAME]];
+                return [self.skCoreDataManager fetchRecords:@"Penalty" forPredicate:predicate];
+            }
             break;
         }
         case GOAL_DICT:
         {
-            return [type isEqualToString:@"HOME"]?goalHomeDict:goalAwayDict;
-            
+            if([type isEqualToString:@"HOME"])
+            {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"game_type == %@", [NSNumber numberWithInt:HOME_GAME]];
+                return [self.skCoreDataManager fetchRecords:@"Goal" forPredicate:predicate];
+            }
+            else
+            {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"game_type == %@", [NSNumber numberWithInt:AWAY_GAME]];
+                return [self.skCoreDataManager fetchRecords:@"Goal" forPredicate:predicate];
+            }
             break;
         }
         default:

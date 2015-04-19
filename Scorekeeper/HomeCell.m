@@ -7,6 +7,7 @@
 //
 
 #import "HomeCell.h"
+#import "Player.h"
 
 @interface HomeCell ()
 {
@@ -17,9 +18,9 @@
 
 @implementation HomeCell
 
--(id) initCellWithData:(NSMutableArray *)dataArr forRowNum:(int) row ofTotalRows:(int)total andNoOfCols:(int)noOfCols
+-(id) initCellWithData:(id)obj forRowNum:(int) row ofTotalRows:(int)total andNoOfCols:(int)noOfCols
 {
-    self=[super initCellWithData:dataArr forRowNum:row ofTotalRows:total andNoOfCols:noOfCols];
+    self=[super initCellWithData:obj forRowNum:row ofTotalRows:total andNoOfCols:noOfCols];
     
     if (self)
     {
@@ -31,15 +32,19 @@
             [self createViews];
         }
         
-        if (dataArr==NULL)
+        if (obj==nil)
         {
             indexLbl.text=@"#";
             playerName.text=@"HOME Players Name";
         }
         else
         {
-            indexLbl.text=[dataArr objectAtIndex:0];
-            playerName.text=[dataArr objectAtIndex:1];
+            if([obj isKindOfClass:[Player class]])
+            {
+                Player *player = (Player*)obj;
+                indexLbl.text = player.player_position;
+                playerName.text = player.player_name;
+            }
         }
     }
     

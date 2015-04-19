@@ -7,6 +7,7 @@
 //
 
 #import "GoalCell.h"
+#import "Goal.h"
 
 @interface GoalCell ()
 {
@@ -21,9 +22,9 @@
 
 @implementation GoalCell
 
--(id) initCellWithData:(NSMutableArray *)dataArr forRowNum:(int) row ofTotalRows:(int)total andNoOfCols:(int)noOfCols
+-(id) initCellWithData:(id)obj forRowNum:(int) row ofTotalRows:(int)total andNoOfCols:(int)noOfCols
 {
-    self=[super initCellWithData:dataArr forRowNum:row ofTotalRows:total andNoOfCols:noOfCols];
+    self=[super initCellWithData:obj forRowNum:row ofTotalRows:total andNoOfCols:noOfCols];
     
     if (self)
     {
@@ -35,7 +36,7 @@
             [self createViews];
         }
         
-        if (dataArr==NULL)
+        if (obj==nil)
         {
             indexLbl.text=@"#";
             playerName.text=@"PER";
@@ -46,12 +47,17 @@
         }
         else
         {
-            indexLbl.text=[dataArr objectAtIndex:0];
-            playerName.text=[dataArr objectAtIndex:1];
-            timeLbl.text=[dataArr objectAtIndex:2];
-            goalLbl.text=[dataArr objectAtIndex:3];
-            assistOneLbl.text=[dataArr objectAtIndex:4];
-            assistTwoLbl.text=[dataArr objectAtIndex:5];
+         
+            if([obj isKindOfClass:[Goal class]])
+            {
+                Goal *goalObj = (Goal*)obj;
+                indexLbl.text= [NSString stringWithFormat:@"%@", goalObj.goal_id];
+                playerName.text=goalObj.per;
+                timeLbl.text=goalObj.time;
+                goalLbl.text=goalObj.goal;
+                assistOneLbl.text=goalObj.assist1;
+                assistTwoLbl.text=goalObj.assist2;
+            }
         }
     }
     

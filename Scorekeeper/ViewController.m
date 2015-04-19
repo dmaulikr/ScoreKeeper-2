@@ -14,6 +14,7 @@
 #import "GameSettingsController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SKCoreDataManager.h"
+
 @interface ViewController ()
 {
     MenuView *menuView;
@@ -67,11 +68,11 @@
     [self.view addSubview:headerTitle];
     
     [self createHomeTable];
-    [self createPenaltyTableForHome];
     [self createGoalTableForHome];
+    [self createPenaltyTableForHome];
 
-    [self createPenaltyTableForAway];
     [self createGoalTableForAway];
+    [self createPenaltyTableForAway];
     [self createAwayTable];
 
     menuView=[[MenuView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
@@ -112,7 +113,8 @@
     mainHomeTable=[[TableView alloc] initWithFrame:CGRectMake(2,homeNameLbl.frame.size.height+homeNameLbl.frame.origin.y+5,homeView.frame.size.width-4,630) btnLbl:@"" cellClass:@"HomeCell" tableID:HOME_DICT];
     mainHomeTable.backgroundColor=[UIColor clearColor];
     mainHomeTable.delegate=self;
-    mainHomeTable.dataDict=[[DataManager getInstance] getDataDict:@"HOME" forMode:HOME_DICT];
+    mainHomeTable.gameType = HOME_GAME;
+    mainHomeTable.dataArray=[[[DataManager getInstance] getData:@"HOME" forMode:HOME_DICT] mutableCopy];
     [homeView addSubview:mainHomeTable];
     [mainHomeTable reloadData];
     
@@ -121,11 +123,12 @@
 
 -(void)createPenaltyTableForHome
 {
-    homeSubTable=[[TableView alloc] initWithFrame:CGRectMake(homeView.frame.size.width+homeView.frame.origin.x+10,110,310,300) btnLbl:@"PENALTY HOME" cellClass:@"PenaltyCell" tableID:PENALTY_DICT];
+    homeSubTable=[[TableView alloc] initWithFrame:CGRectMake(homeView.frame.size.width+homeView.frame.origin.x+10,homeSubTableTwo.frame.size.height+homeSubTableTwo.frame.origin.y+20,310,300) btnLbl:@"PENALTY HOME" cellClass:@"PenaltyCell" tableID:PENALTY_DICT];
     homeSubTable.backgroundColor=[UIColor clearColor];
-    homeSubTable.dataDict=[[DataManager getInstance] getDataDict:@"HOME" forMode:PENALTY_DICT];
+    homeSubTable.dataArray=[[[DataManager getInstance] getData:@"HOME" forMode:PENALTY_DICT] mutableCopy];
     [self.view addSubview:homeSubTable];
     homeSubTable.delegate=self;
+    homeSubTable.gameType = HOME_GAME;
     [homeSubTable reloadData];
     
     [self createAddButton:501 withRect:CGRectMake(homeSubTable.frame.size.width+homeSubTable.frame.origin.x-40, homeSubTable.frame.origin.y, 35, 35)];
@@ -133,10 +136,11 @@
 
 -(void)createGoalTableForHome
 {
-    homeSubTableTwo=[[TableView alloc] initWithFrame:CGRectMake(homeView.frame.size.width+homeView.frame.origin.x+10,homeSubTable.frame.size.height+homeSubTable.frame.origin.y+20,310,300) btnLbl:@"GOAL HOME" cellClass:@"GoalCell" tableID:GOAL_DICT];
+    homeSubTableTwo=[[TableView alloc] initWithFrame:CGRectMake(homeView.frame.size.width+homeView.frame.origin.x+10,110,310,300) btnLbl:@"GOAL HOME" cellClass:@"GoalCell" tableID:GOAL_DICT];
     homeSubTableTwo.backgroundColor=[UIColor clearColor];
     homeSubTableTwo.delegate=self;
-    homeSubTableTwo.dataDict=[[DataManager getInstance] getDataDict:@"HOME" forMode:GOAL_DICT];
+    homeSubTableTwo.gameType = HOME_GAME;
+    homeSubTableTwo.dataArray=[[[DataManager getInstance] getData:@"HOME" forMode:GOAL_DICT] mutableCopy];
     [self.view addSubview:homeSubTableTwo];
     [homeSubTableTwo reloadData];
     
@@ -145,10 +149,11 @@
 
 -(void)createPenaltyTableForAway
 {
-    awaySubTable=[[TableView alloc] initWithFrame:CGRectMake(homeSubTable.frame.size.width+homeSubTable.frame.origin.x+15,110,310,300)btnLbl:@"PENALTY AWAY" cellClass:@"PenaltyCell" tableID:PENALTY_DICT];
+    awaySubTable=[[TableView alloc] initWithFrame:CGRectMake(homeSubTable.frame.size.width+homeSubTable.frame.origin.x+15,awaySubTableTwo.frame.size.height+awaySubTableTwo.frame.origin.y+20,310,300)btnLbl:@"PENALTY AWAY" cellClass:@"PenaltyCell" tableID:PENALTY_DICT];
     awaySubTable.backgroundColor=[UIColor clearColor];
     awaySubTable.delegate=self;
-    awaySubTable.dataDict=[[DataManager getInstance] getDataDict:@"AWAY" forMode:PENALTY_DICT];
+    awaySubTable.gameType = AWAY_GAME;
+    awaySubTable.dataArray=[[[DataManager getInstance] getData:@"AWAY" forMode:PENALTY_DICT] mutableCopy];
     [self.view addSubview:awaySubTable];
     [awaySubTable reloadData];
     
@@ -157,10 +162,11 @@
 
 -(void)createGoalTableForAway
 {
-    awaySubTableTwo=[[TableView alloc] initWithFrame:CGRectMake(homeSubTable.frame.size.width+homeSubTable.frame.origin.x+15,awaySubTable.frame.size.height+awaySubTable.frame.origin.y+20,310,300) btnLbl:@"GOAL AWAY" cellClass:@"GoalCell" tableID:GOAL_DICT];
+    awaySubTableTwo=[[TableView alloc] initWithFrame:CGRectMake(homeSubTable.frame.size.width+homeSubTable.frame.origin.x+15,110,310,300) btnLbl:@"GOAL AWAY" cellClass:@"GoalCell" tableID:GOAL_DICT];
     awaySubTableTwo.backgroundColor=[UIColor clearColor];
     awaySubTableTwo.delegate=self;
-    awaySubTableTwo.dataDict=[[DataManager getInstance] getDataDict:@"AWAY" forMode:GOAL_DICT];
+    awaySubTableTwo.gameType = AWAY_GAME;
+    awaySubTableTwo.dataArray=[[[DataManager getInstance] getData:@"AWAY" forMode:GOAL_DICT] mutableCopy];
     [self.view addSubview:awaySubTableTwo];
     [awaySubTableTwo reloadData];
     
@@ -194,7 +200,8 @@
     mainAwayTable=[[TableView alloc] initWithFrame:CGRectMake(2,awayNameLbl.frame.size.height+awayNameLbl.frame.origin.y+5,awayView.frame.size.width-4,630) btnLbl:@"" cellClass:@"HomeCell" tableID:HOME_DICT];
     mainAwayTable.backgroundColor=[UIColor clearColor];
     mainAwayTable.delegate=self;
-    mainAwayTable.dataDict=[[DataManager getInstance] getDataDict:@"AWAY" forMode:HOME_DICT];
+    mainAwayTable.gameType = AWAY_GAME;
+    mainAwayTable.dataArray=[[[DataManager getInstance] getData:@"AWAY" forMode:HOME_DICT] mutableCopy];
     [awayView addSubview:mainAwayTable];
     [mainAwayTable reloadData];
     

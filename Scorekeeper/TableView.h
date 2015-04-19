@@ -17,7 +17,6 @@
 
 @interface TableView : UIView<UITableViewDataSource,UITableViewDelegate,UIPopoverControllerDelegate,InputViewControllerDelegate>
 {
-    NSMutableDictionary *dataDict;
     
     id<TableViewDelegate> delegate;
     
@@ -25,9 +24,10 @@
 }
 
 @property (retain) id<TableViewDelegate> delegate;
-@property (retain) NSMutableDictionary *dataDict;
+@property (nonatomic, strong)NSMutableArray *dataArray;
 @property (retain) UIPopoverController *popoverController;
 @property (retain) NSString *tableSide;
+@property (assign) int gameType;
 
 -(id)initWithFrame:(CGRect)frame btnLbl:(NSString *)btnLbl cellClass:(NSString *)cell tableID:(int)tableId;
 
