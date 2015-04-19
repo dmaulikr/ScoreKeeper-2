@@ -13,7 +13,7 @@
 #import "InputViewController.h"
 #import "GameSettingsController.h"
 #import <QuartzCore/QuartzCore.h>
-
+#import "SKCoreDataManager.h"
 @interface ViewController ()
 {
     MenuView *menuView;

@@ -7,6 +7,8 @@
 //
 
 #import "InputViewController.h"
+#import "SKCoreDataManager.h"
+#import "Player.h"
 
 @interface InputViewController ()
 {
@@ -34,6 +36,7 @@
     
     NSMutableDictionary *updateDict;
 }
+@property (nonatomic, strong)SKCoreDataManager *coreDataManager;
 @end
 
 @implementation InputViewController
@@ -54,6 +57,7 @@
         typeThree=[[NSMutableArray alloc] initWithObjects:@"PER",@"TIME",@"GOAL",@"ASSIST",@"ASSIST", nil];
         
         updateDict=sourceData;
+        self.coreDataManager = [SKCoreDataManager sharedInstance];
     }
 
     return self;
@@ -181,20 +185,26 @@
 {
     if (editMode==-1)
     {
-        NSMutableArray *internalArr=[[NSMutableArray alloc] init];
+        NSError *error;
+        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Player" inManagedObjectContext:self.coreDataManager.managedObjectContext];
+        Player *player = [[Player alloc] initWithEntity:entityDescription insertIntoManagedObjectContext:self.coreDataManager.managedObjectContext];
+        long playerId = [[updateDict allKeys] count] + 1;
 
-        [internalArr addObject:[NSString stringWithFormat:@"%i",[[updateDict allKeys] count]+1]];
+         player.player_id = [NSNumber numberWithLong:playerId];
         
         for (int i=0; i<5; i++)
         {
             UITextField *field=((UITextField *)[self.view viewWithTag:300+i]);
-            
+
             if (!field.isHidden)
             {
-                [internalArr addObject:field.text];
+                player.player_name = field.text;
             }
         }
-        [updateDict setObject:internalArr forKey:[NSString stringWithFormat:@"%i",([[updateDict allKeys] count])]];
+        if ([self.coreDataManager.managedObjectContext save:&error]) {
+            [updateDict setObject:player forKey:[NSString stringWithFormat:@"%lu",(unsigned long)([[updateDict allKeys] count])]];
+        }
+
     }
     else
     {
@@ -210,7 +220,58 @@
             }
         }
     }
-    
+
+//    switch (displayType)
+//    {
+//        case 1:
+//        {
+//            if (editMode==-1)
+//            {
+//                NSMutableArray *internalArr=[[NSMutableArray alloc] init];
+//
+//                [internalArr addObject:[NSString stringWithFormat:@"%lu",[[updateDict allKeys] count]+1]];
+//
+//                for (int i=0; i<5; i++)
+//                {
+//                    UITextField *field=((UITextField *)[self.view viewWithTag:300+i]);
+//
+//                    if (!field.isHidden)
+//                    {
+//                        [internalArr addObject:field.text];
+//                    }
+//                }
+//                [updateDict setObject:internalArr forKey:[NSString stringWithFormat:@"%lu",(unsigned long)([[updateDict allKeys] count])]];
+//            }
+//            else
+//            {
+//                NSMutableArray *internalArr=[updateDict objectForKey:[NSString stringWithFormat:@"%i",editMode]];
+//
+//                for (int i=0; i<5; i++)
+//                {
+//                    UITextField *field=((UITextField *)[self.view viewWithTag:300+i]);
+//                    
+//                    if (!field.isHidden)
+//                    {
+//                        [internalArr replaceObjectAtIndex:(i+1) withObject:field.text];
+//                    }
+//                }
+//            }
+//            break;
+//        }
+//        case 2:
+//        {
+//            [self showOrHide:NO count:4 lblArr:typeTwo];
+//            break;
+//        }
+//        case 3:
+//        {
+//            [self showOrHide:NO count:5 lblArr:typeThree];
+//            break;
+//        }
+//        default:
+//            break;
+//    }
+
     [delegate doneButtonClicked];
 }
 

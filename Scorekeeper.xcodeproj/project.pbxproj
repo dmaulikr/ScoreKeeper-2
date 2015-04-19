@@ -30,6 +30,12 @@
 		098D81891ADA34A900D3988E /* PenaltyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 098D81881ADA34A900D3988E /* PenaltyCell.m */; };
 		09F891651AD9196F000BEA8F /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09F891641AD9196F000BEA8F /* FacebookSDK.framework */; };
 		09F8916E1AD91AFA000BEA8F /* LoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 09F8916D1AD91AFA000BEA8F /* LoginController.m */; };
+		84518F411AE0A9640094FF2C /* ScorekeeperModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84518F3F1AE0A9640094FF2C /* ScorekeeperModel.xcdatamodeld */; };
+		84518F451AE0ABC80094FF2C /* Goal.m in Sources */ = {isa = PBXBuildFile; fileRef = 84518F441AE0ABC80094FF2C /* Goal.m */; };
+		84518F481AE0ABC90094FF2C /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 84518F471AE0ABC90094FF2C /* Player.m */; };
+		84518F4B1AE0ABC90094FF2C /* Penalty.m in Sources */ = {isa = PBXBuildFile; fileRef = 84518F4A1AE0ABC90094FF2C /* Penalty.m */; };
+		84518F511AE0AF990094FF2C /* SKCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84518F501AE0AF990094FF2C /* SKCoreDataManager.m */; };
+		84518F531AE0B0AB0094FF2C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84518F521AE0B0AB0094FF2C /* CoreData.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +92,16 @@
 		09F8916A1AD919B3000BEA8F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		09F8916C1AD91AFA000BEA8F /* LoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginController.h; sourceTree = "<group>"; };
 		09F8916D1AD91AFA000BEA8F /* LoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginController.m; sourceTree = "<group>"; };
+		84518F401AE0A9640094FF2C /* ScorekeeperModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ScorekeeperModel.xcdatamodel; sourceTree = "<group>"; };
+		84518F431AE0ABC80094FF2C /* Goal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Goal.h; path = model/Goal.h; sourceTree = "<group>"; };
+		84518F441AE0ABC80094FF2C /* Goal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Goal.m; path = model/Goal.m; sourceTree = "<group>"; };
+		84518F461AE0ABC90094FF2C /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Player.h; path = model/Player.h; sourceTree = "<group>"; };
+		84518F471AE0ABC90094FF2C /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Player.m; path = model/Player.m; sourceTree = "<group>"; };
+		84518F491AE0ABC90094FF2C /* Penalty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Penalty.h; path = model/Penalty.h; sourceTree = "<group>"; };
+		84518F4A1AE0ABC90094FF2C /* Penalty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Penalty.m; path = model/Penalty.m; sourceTree = "<group>"; };
+		84518F4F1AE0AF990094FF2C /* SKCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKCoreDataManager.h; sourceTree = "<group>"; };
+		84518F501AE0AF990094FF2C /* SKCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKCoreDataManager.m; sourceTree = "<group>"; };
+		84518F521AE0B0AB0094FF2C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84518F531AE0B0AB0094FF2C /* CoreData.framework in Frameworks */,
 				09F891651AD9196F000BEA8F /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -110,8 +127,12 @@
 		09634A051ADA635C00942252 /* DataManager */ = {
 			isa = PBXGroup;
 			children = (
+				84518F4F1AE0AF990094FF2C /* SKCoreDataManager.h */,
+				84518F501AE0AF990094FF2C /* SKCoreDataManager.m */,
+				84518F421AE0AB970094FF2C /* Model */,
 				09634A061ADA63CE00942252 /* DataManager.h */,
 				09634A071ADA63CE00942252 /* DataManager.m */,
+				84518F3F1AE0A9640094FF2C /* ScorekeeperModel.xcdatamodeld */,
 			);
 			name = DataManager;
 			sourceTree = "<group>";
@@ -119,6 +140,7 @@
 		096B0E311AD908A5006D791D = {
 			isa = PBXGroup;
 			children = (
+				84518F521AE0B0AB0094FF2C /* CoreData.framework */,
 				096B0E3C1AD908A5006D791D /* Scorekeeper */,
 				096B0E561AD908A5006D791D /* ScorekeeperTests */,
 				096B0E3B1AD908A5006D791D /* Products */,
@@ -202,6 +224,19 @@
 				096B0E581AD908A5006D791D /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		84518F421AE0AB970094FF2C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				84518F491AE0ABC90094FF2C /* Penalty.h */,
+				84518F4A1AE0ABC90094FF2C /* Penalty.m */,
+				84518F461AE0ABC90094FF2C /* Player.h */,
+				84518F471AE0ABC90094FF2C /* Player.m */,
+				84518F431AE0ABC80094FF2C /* Goal.h */,
+				84518F441AE0ABC80094FF2C /* Goal.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -311,7 +346,9 @@
 				096B0E461AD908A5006D791D /* ViewController.m in Sources */,
 				09634A081ADA63CE00942252 /* DataManager.m in Sources */,
 				098D81891ADA34A900D3988E /* PenaltyCell.m in Sources */,
+				84518F4B1AE0ABC90094FF2C /* Penalty.m in Sources */,
 				096B0E671AD90997006D791D /* MenuView.m in Sources */,
+				84518F451AE0ABC80094FF2C /* Goal.m in Sources */,
 				096B0E431AD908A5006D791D /* AppDelegate.m in Sources */,
 				09634A181ADAC9A900942252 /* GameSettingsController.m in Sources */,
 				09634A0B1ADA70BE00942252 /* GoalCell.m in Sources */,
@@ -319,7 +356,10 @@
 				09634A1D1ADAD8D200942252 /* MenuCell.m in Sources */,
 				09634A111ADA7E0500942252 /* InputViewController.m in Sources */,
 				098D81861ADA22AB00D3988E /* DefaultRow.m in Sources */,
+				84518F481AE0ABC90094FF2C /* Player.m in Sources */,
+				84518F511AE0AF990094FF2C /* SKCoreDataManager.m in Sources */,
 				096B0E401AD908A5006D791D /* main.m in Sources */,
+				84518F411AE0A9640094FF2C /* ScorekeeperModel.xcdatamodeld in Sources */,
 				09254D271AD9A818001D09DC /* HomeCell.m in Sources */,
 				09F8916E1AD91AFA000BEA8F /* LoginController.m in Sources */,
 			);
@@ -542,6 +582,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		84518F3F1AE0A9640094FF2C /* ScorekeeperModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				84518F401AE0A9640094FF2C /* ScorekeeperModel.xcdatamodel */,
+			);
+			currentVersion = 84518F401AE0A9640094FF2C /* ScorekeeperModel.xcdatamodel */;
+			path = ScorekeeperModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 096B0E321AD908A5006D791D /* Project object */;
 }
